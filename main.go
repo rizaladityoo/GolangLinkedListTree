@@ -12,6 +12,14 @@ type Node struct {
 	right *Node
 }
 
+func sloane(angka int) []int {
+	array := []int{1}
+	for i := 1; i <= angka; i++ {
+		array = append(array, i+array[i-1])
+	}
+	return array
+}
+
 func (root *Node) recursive(level int) {
 	if root != nil {
 		for x := 1; x <= level; x++ {
@@ -25,6 +33,15 @@ func (root *Node) recursive(level int) {
 }
 
 func main() {
+	var angka int
+	hasil1 := sloane(20)
+	fmt.Printf("%d \nMasukan angka : ", hasil1[len(hasil1)-1])
+
+	fmt.Scan(&angka)
+	deret := sloane(angka)
+	deret = deret[:len(deret)-1]
+	fmt.Println(deret)
+
 	root := Node{"A", nil, nil, nil}
 	root.left = &Node{"B", nil, nil, nil}
 	root.right = &Node{"C", nil, nil, nil}
@@ -35,14 +52,27 @@ func main() {
 	root.right.right = &Node{"H", nil, nil, nil}
 
 	root.recursive(0)
-	var s string
+	var s, child string
 
-	fmt.Print("program mencari alphabet pada tree\n")
+	fmt.Print("program mencari path pada tree\n")
 	fmt.Print("masukan alphabet : ")
 	fmt.Scan(&s)
 	fmt.Print(root.search(strings.ToUpper(s)))
 
+	fmt.Print("program mencari child pada tree\n")
+	fmt.Print("masukan alphabet : ")
+	fmt.Scan(&child)
+	root.searchChild(child)
+
 }
+
+func (root *Node) searchChild(s string) string {
+	return "a"
+}
+
+// func () recursiveSearchChild() {
+
+// }
 
 func (root *Node) search(s string) bool {
 	if string(s[0]) != "A" {
