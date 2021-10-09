@@ -62,67 +62,66 @@ func main() {
 	fmt.Print("\nprogram mencari child pada tree\n")
 	fmt.Print("masukan alphabet : ")
 	fmt.Scan(&child)
-	fmt.Print(root.searchChild(child))
+	fmt.Print(root.searchChild(strings.ToUpper(child)))
 
 }
 
 func (root *Node) searchChild(c string) string {
-	rootArr := root.recursiveSearch(c, 0)
-	fmt.Print(rootArr[len(rootArr)-1])
-	// if rootArr[len(rootArr)-1].left != nil && rootArr[len(rootArr)-1].mid != nil && rootArr[len(rootArr)-1].right != nil {
-	// 	return rootArr[len(rootArr)-1].left.data + "-" + rootArr[len(rootArr)-1].mid.data + "-" + rootArr[len(rootArr)-1].right.data
-	// }
-	return "Tidak ada Child"
+	temp = nil
+	root.recursiveSearch(c, 0, &temp)
+	if temp[len(temp)-1].left == nil && temp[len(temp)-1].mid == nil && temp[len(temp)-1].right == nil {
+		return "Tidak ada child"
+	}
+	return temp[len(temp)-1].left.data + "-" + temp[len(temp)-1].right.data
 }
 
 func (root *Node) search(s string) bool {
 	if string(s[0]) != "A" {
 		return false
 	}
-
-	return len(root.recursiveSearch(s, 0)) >= len(s)-1
+	root.recursiveSearch(s, 0, &temp)
+	return len(temp) >= len(s)-1
 
 }
 
 var temp []Node
 
-func (root *Node) recursiveSearch(s string, level int) []Node {
+func (root *Node) recursiveSearch(s string, level int, temp *[]Node) {
 	if root != nil {
 		if len(s) > level+1 {
 			if root.left != nil {
 				if root.left.data == string(s[level+1]) {
-					temp = append(temp, Node{
+					*temp = append(*temp, Node{
 						data:  root.left.data,
 						left:  root.left.left,
 						mid:   root.left.mid,
 						right: root.left.right,
 					})
-					root.left.recursiveSearch(s, level+1)
+					root.left.recursiveSearch(s, level+1, temp)
 				}
 			}
 			if root.mid != nil {
 				if root.mid.data == string(s[level+1]) {
-					temp = append(temp, Node{
+					*temp = append(*temp, Node{
 						data:  root.mid.data,
 						left:  root.mid.left,
 						mid:   root.mid.mid,
 						right: root.mid.right,
 					})
-					root.mid.recursiveSearch(s, level+1)
+					root.mid.recursiveSearch(s, level+1, temp)
 				}
 			}
 			if root.right != nil {
 				if root.right.data == string(s[level+1]) {
-					temp = append(temp, Node{
+					*temp = append(*temp, Node{
 						data:  root.right.data,
 						left:  root.right.left,
 						mid:   root.right.mid,
 						right: root.right.right,
 					})
-					root.right.recursiveSearch(s, level+1)
+					root.right.recursiveSearch(s, level+1, temp)
 				}
 			}
 		}
 	}
-	return temp
 }
